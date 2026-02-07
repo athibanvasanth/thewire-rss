@@ -121,9 +121,12 @@ def build_rss(posts, feed_url, base_url="", title=FEED_TITLE, description=FEED_D
             alt_text = fm.get("alt_text", "")
             caption_html = fm.get("caption", {}).get("rendered", "")
             caption_text = strip_html(caption_html) if caption_html else ""
-            # media:content for RSS reader thumbnail (no enclosure to avoid attachment)
+            # Thumbnail for RSS reader list view (both tags for broad reader support)
+            escaped_img = escape_xml(img_url)
             thumbnail_xml = (
-                f'      <media:content url="{escape_xml(img_url)}" medium="image" type="{mime_type}"/>\n'
+                f'      <media:content url="{escaped_img}" medium="image" type="{mime_type}"/>\n'
+                f'      <media:thumbnail url="{escaped_img}"/>\n'
+                f'      <enclosure url="{escaped_img}" type="{mime_type}" length="0"/>\n'
             )
             # Hero image at top of content, matching The Wire's layout
             hero_html = f'<figure style="margin:0 0 1.5em 0;"><img src="{img_url}" alt="{alt_text}" style="max-width:100%;height:auto;display:block;"/>'
@@ -134,8 +137,11 @@ def build_rss(posts, feed_url, base_url="", title=FEED_TITLE, description=FEED_D
             # Use The Wire logo as fallback thumbnail so RSS readers
             # don't render an empty image preview placeholder.
             placeholder_url = f"{base_url}/placeholder.png" if base_url else "placeholder.png"
+            escaped_ph = escape_xml(placeholder_url)
             thumbnail_xml = (
-                f'      <media:content url="{escape_xml(placeholder_url)}" medium="image" type="image/png"/>\n'
+                f'      <media:content url="{escaped_ph}" medium="image" type="image/png"/>\n'
+                f'      <media:thumbnail url="{escaped_ph}"/>\n'
+                f'      <enclosure url="{escaped_ph}" type="image/png" length="0"/>\n'
             )
 
         # Clean and prepare the article content
