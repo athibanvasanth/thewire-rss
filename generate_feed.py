@@ -2,6 +2,7 @@ import datetime
 import html
 import os
 import re
+import shutil
 
 import requests
 
@@ -87,7 +88,7 @@ def fetch_categories():
     return resp.json()
 
 
-def build_rss(posts, feed_url, title=FEED_TITLE, description=FEED_DESCRIPTION):
+def build_rss(posts, feed_url, base_url="", title=FEED_TITLE, description=FEED_DESCRIPTION):
     now = datetime.datetime.now(datetime.timezone.utc).strftime(
         "%a, %d %b %Y %H:%M:%S +0000"
     )
@@ -129,8 +130,13 @@ def build_rss(posts, feed_url, title=FEED_TITLE, description=FEED_DESCRIPTION):
             if caption_text:
                 hero_html += f'<figcaption style="font-size:0.85em;color:#666;margin-top:0.4em;">{caption_text}</figcaption>'
             hero_html += "</figure>\n"
-        # No fallback — skip image metadata entirely if no featured image,
-        # so RSS readers don't render an empty image preview.
+        else:
+            # Use The Wire logo as fallback thumbnail so RSS readers
+            # don't render an empty image preview placeholder.
+            placeholder_url = f"{base_url}/placeholder.png" if base_url else "placeholder.png"
+            thumbnail_xml = (
+                f'      <media:content url="{escape_xml(placeholder_url)}" medium="image" type="image/png"/>\n'
+            )
 
         # Clean and prepare the article content
         content = clean_content(content)
@@ -211,6 +217,12 @@ def build_index(base_url, category_feeds):
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
 
+    # Copy static assets
+    script_dir = os.path.dirname(__file__)
+    placeholder_src = os.path.join(script_dir, "placeholder.png")
+    if os.path.exists(placeholder_src):
+        shutil.copy2(placeholder_src, os.path.join(OUT_DIR, "placeholder.png"))
+
     # Determine base URL from environment or default
     base_url = os.environ.get("BASE_URL", "").rstrip("/")
 
@@ -218,7 +230,7 @@ def main():
     print("Fetching main feed...")
     posts = fetch_posts(30)
     feed_url = f"{base_url}/feed.xml" if base_url else "feed.xml"
-    rss = build_rss(posts, feed_url)
+    rss = build_rss(posts, feed_url, base_url=base_url)
     with open(os.path.join(OUT_DIR, "feed.xml"), "w", encoding="utf-8") as f:
         f.write(rss)
     print(f"  Wrote feed.xml ({len(posts)} posts)")
@@ -245,6 +257,7 @@ def main():
         cat_rss = build_rss(
             cat_posts,
             cat_feed_url,
+            base_url=base_url,
             title=f"The Wire - {name}",
             description=f"Latest articles from The Wire in the {name} category.",
         )
