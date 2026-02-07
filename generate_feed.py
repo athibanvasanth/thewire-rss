@@ -129,13 +129,8 @@ def build_rss(posts, feed_url, title=FEED_TITLE, description=FEED_DESCRIPTION):
             if caption_text:
                 hero_html += f'<figcaption style="font-size:0.85em;color:#666;margin-top:0.4em;">{caption_text}</figcaption>'
             hero_html += "</figure>\n"
-        else:
-            # Fallback: use first image from content for thumbnail
-            fallback_img = extract_first_image(content)
-            if fallback_img:
-                thumbnail_xml = (
-                    f'      <media:content url="{escape_xml(fallback_img)}" medium="image" type="image/jpeg"/>\n'
-                )
+        # No fallback — skip image metadata entirely if no featured image,
+        # so RSS readers don't render an empty image preview.
 
         # Clean and prepare the article content
         content = clean_content(content)
