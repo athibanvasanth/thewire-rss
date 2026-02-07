@@ -30,6 +30,26 @@ def extract_first_image(html_content):
     return None
 
 
+def clean_content(html_content):
+    """Clean WordPress content for proper RSS display."""
+    # Remove script tags and their content
+    html_content = re.sub(r"<script[^>]*>.*?</script>", "", html_content, flags=re.DOTALL)
+    # Remove noscript tags
+    html_content = re.sub(r"<noscript[^>]*>.*?</noscript>", "", html_content, flags=re.DOTALL)
+    # Remove inline style tags
+    html_content = re.sub(r"<style[^>]*>.*?</style>", "", html_content, flags=re.DOTALL)
+    # Remove data-* attributes (WP clutter)
+    html_content = re.sub(r'\s+data-\w+="[^"]*"', "", html_content)
+    # Remove loading="lazy" and decoding="async" (not needed in feeds)
+    html_content = re.sub(r'\s+(?:loading|decoding)="[^"]*"', "", html_content)
+    # Remove srcset and sizes attributes (causes clutter, src is enough)
+    html_content = re.sub(r'\s+srcset="[^"]*"', "", html_content)
+    html_content = re.sub(r'\s+sizes="[^"]*"', "", html_content)
+    # Clean up excessive whitespace
+    html_content = re.sub(r"\n{3,}", "\n\n", html_content)
+    return html_content.strip()
+
+
 def escape_xml(text):
     return (
         text.replace("&", "&amp;")
@@ -89,22 +109,37 @@ def build_rss(posts, feed_url, title=FEED_TITLE, description=FEED_DESCRIPTION):
         if authors and authors[0].get("name"):
             author = escape_xml(authors[0]["name"])
 
-        # Extract featured image thumbnail (with fallback to first content image)
+        # Extract featured image for thumbnail and hero image
         thumbnail_xml = ""
-        img_url = None
-        mime_type = "image/jpeg"
+        hero_html = ""
         featured_media = embedded.get("wp:featuredmedia", [])
         if featured_media and featured_media[0].get("source_url"):
-            img_url = featured_media[0]["source_url"]
-            mime_type = featured_media[0].get("mime_type", "image/jpeg")
-        else:
-            img_url = extract_first_image(content)
-        if img_url:
-            escaped_img = escape_xml(img_url)
+            fm = featured_media[0]
+            img_url = fm["source_url"]
+            mime_type = fm.get("mime_type", "image/jpeg")
+            alt_text = fm.get("alt_text", "")
+            caption_html = fm.get("caption", {}).get("rendered", "")
+            caption_text = strip_html(caption_html) if caption_html else ""
+            # media:content for RSS reader thumbnail (no enclosure to avoid attachment)
             thumbnail_xml = (
-                f'      <enclosure url="{escaped_img}" type="{mime_type}" length="0"/>\n'
-                f'      <media:content url="{escaped_img}" medium="image" type="{mime_type}"/>\n'
+                f'      <media:content url="{escape_xml(img_url)}" medium="image" type="{mime_type}"/>\n'
             )
+            # Hero image at top of content, matching The Wire's layout
+            hero_html = f'<figure style="margin:0 0 1.5em 0;"><img src="{img_url}" alt="{alt_text}" style="max-width:100%;height:auto;display:block;"/>'
+            if caption_text:
+                hero_html += f'<figcaption style="font-size:0.85em;color:#666;margin-top:0.4em;">{caption_text}</figcaption>'
+            hero_html += "</figure>\n"
+        else:
+            # Fallback: use first image from content for thumbnail
+            fallback_img = extract_first_image(content)
+            if fallback_img:
+                thumbnail_xml = (
+                    f'      <media:content url="{escape_xml(fallback_img)}" medium="image" type="image/jpeg"/>\n'
+                )
+
+        # Clean and prepare the article content
+        content = clean_content(content)
+        full_content = hero_html + content
 
         categories_xml = ""
         terms = embedded.get("wp:term", [])
@@ -125,7 +160,7 @@ def build_rss(posts, feed_url, title=FEED_TITLE, description=FEED_DESCRIPTION):
       <pubDate>{pub_date}</pubDate>
       <dc:creator>{author}</dc:creator>
       <description>{post_description}</description>
-      <content:encoded><![CDATA[{content}]]></content:encoded>
+      <content:encoded><![CDATA[{full_content}]]></content:encoded>
 {thumbnail_xml}{categories_xml}    </item>"""
         )
 
