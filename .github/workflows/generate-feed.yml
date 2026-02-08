@@ -2,8 +2,8 @@ name: Generate RSS Feed
 
 on:
   schedule:
-    - cron: "*/30 * * * *" # Every 30 minutes
-  workflow_dispatch: # Allow manual trigger
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
   push:
     branches: [main]
 
@@ -17,8 +17,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,16 +37,9 @@ jobs:
         env:
           BASE_URL: ${{ vars.BASE_URL }}
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: public
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
