@@ -32,8 +32,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Generate feeds
+      - name: Generate Wire feeds
         run: python generate_feed.py
+        env:
+          BASE_URL: ${{ vars.BASE_URL }}
+
+      - name: Generate Scroll feed
+        run: python generate_scroll_feed.py
         env:
           BASE_URL: ${{ vars.BASE_URL }}
 
