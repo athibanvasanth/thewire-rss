@@ -42,6 +42,11 @@ jobs:
         env:
           BASE_URL: ${{ vars.BASE_URL }}
 
+      - name: Generate Caravan feed
+        run: python generate_caravan_feed.py
+        env:
+          BASE_URL: ${{ vars.BASE_URL }}
+
       - uses: actions/upload-pages-artifact@v4
         with:
           path: public
