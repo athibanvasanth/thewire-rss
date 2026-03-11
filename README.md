@@ -1,6 +1,4 @@
-# indie-feeds
-
-Custom RSS feed generator for Indian independent media sites that don't offer RSS feeds.
+# indie-feeds — Custom RSS feeds for Indian independent media
 
 Feeds are auto-generated every 30 minutes via GitHub Actions and served through GitHub Pages.
 
