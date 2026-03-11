@@ -193,7 +193,7 @@ def build_rss(posts, feed_url, base_url="", title=FEED_TITLE, description=FEED_D
 
 def build_index(base_url, category_feeds):
     cat_links = "\n".join(
-        f'    <li><a href="{slug}.xml">{name}</a></li>'
+        f'          <li><a href="{slug}.xml"><code>{slug}.xml</code></a> — {name}</li>'
         for slug, name in sorted(category_feeds, key=lambda x: x[1])
     )
     return f"""<!DOCTYPE html>
@@ -201,21 +201,122 @@ def build_index(base_url, category_feeds):
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Wire RSS Feed</title>
+  <title>indie-feeds — Custom RSS feeds for Indian independent media</title>
   <style>
-    body {{ font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }}
-    a {{ color: #b71c1c; }}
-    code {{ background: #f5f5f5; padding: 2px 6px; border-radius: 3px; }}
+    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+    body {{
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a1a;
+      line-height: 1.6;
+      background: #fafafa;
+    }}
+    header {{
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid #e0e0e0;
+    }}
+    h1 {{
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }}
+    header p {{
+      color: #555;
+      font-size: 0.95rem;
+    }}
+    .source {{
+      margin-bottom: 1.5rem;
+    }}
+    .source h2 {{
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }}
+    .source p {{
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+    }}
+    ul {{
+      list-style: none;
+      padding-left: 0;
+    }}
+    li {{
+      padding: 0.3rem 0;
+    }}
+    a {{
+      color: #b71c1c;
+      text-decoration: none;
+    }}
+    a:hover {{
+      text-decoration: underline;
+    }}
+    code {{
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }}
+    footer {{
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e0e0e0;
+      color: #888;
+      font-size: 0.85rem;
+    }}
+    footer a {{
+      color: #888;
+    }}
   </style>
 </head>
 <body>
-  <h1>The Wire RSS Feed</h1>
-  <p>Main feed: <a href="feed.xml"><code>{base_url}/feed.xml</code></a></p>
-  <h2>Category Feeds</h2>
-  <ul>
+  <header>
+    <h1>indie-feeds</h1>
+    <p>Custom RSS feeds for Indian independent media sites that don't offer their own. Updated every 30 minutes.</p>
+  </header>
+
+  <main>
+    <div class="source">
+      <h2>The Wire</h2>
+      <p>Independent news and opinion</p>
+      <ul>
+        <li><a href="feed.xml"><code>feed.xml</code></a> — All categories</li>
 {cat_links}
-  </ul>
-  <p>Add any of these URLs to your RSS reader.</p>
+      </ul>
+    </div>
+
+    <div class="source">
+      <h2>Scroll Newsletter</h2>
+      <p>Daily news briefing</p>
+      <ul>
+        <li><a href="scroll.xml"><code>scroll.xml</code></a></li>
+      </ul>
+    </div>
+
+    <div class="source">
+      <h2>The Caravan</h2>
+      <p>Long-form journalism on politics and culture</p>
+      <ul>
+        <li><a href="caravan.xml"><code>caravan.xml</code></a></li>
+      </ul>
+    </div>
+
+    <div class="source">
+      <h2>Economic and Political Weekly</h2>
+      <p>India's leading social science journal</p>
+      <ul>
+        <li><a href="epw.xml"><code>epw.xml</code></a></li>
+      </ul>
+    </div>
+  </main>
+
+  <footer>
+    <p>Copy any feed URL and add it to your RSS reader (Inoreader, Feedly, Newsblur, etc.)</p>
+    <p>Source on <a href="https://github.com/athibanvasanth/indie-feeds">GitHub</a></p>
+  </footer>
 </body>
 </html>"""
 
