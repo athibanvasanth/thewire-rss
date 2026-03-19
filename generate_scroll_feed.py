@@ -109,7 +109,12 @@ def main():
     base_url = os.environ.get("BASE_URL", "").rstrip("/")
 
     print("Fetching Scroll newsletter...")
-    posts = fetch_posts()
+    try:
+        posts = fetch_posts()
+    except Exception as e:
+        print(f"  Failed to fetch Scroll newsletter: {e}")
+        print("  Skipping Scroll feed generation")
+        return
     feed_url = f"{base_url}/scroll.xml" if base_url else "scroll.xml"
     rss = build_rss(posts, feed_url, base_url=base_url)
     with open(os.path.join(OUT_DIR, "scroll.xml"), "w", encoding="utf-8") as f:

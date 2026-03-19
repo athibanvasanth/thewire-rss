@@ -172,7 +172,12 @@ def main():
     base_url = os.environ.get("BASE_URL", "").rstrip("/")
 
     print("Fetching Caravan homepage...")
-    urls = fetch_article_urls()
+    try:
+        urls = fetch_article_urls()
+    except Exception as e:
+        print(f"  Failed to fetch Caravan homepage: {e}")
+        print("  Skipping Caravan feed generation")
+        return
     print(f"  Found {len(urls)} article URLs")
 
     articles = []
