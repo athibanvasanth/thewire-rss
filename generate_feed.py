@@ -556,10 +556,6 @@ def build_index(base_url, category_feeds):
         <h3>Indian Independent News</h3>
         <ul class="feed-list">
           <li>
-            <div class="feed-info"><span class="name">The Hindu</span><br><span class="tagline">India's national newspaper since 1878</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://www.thehindu.com/feeder/default.rss')">Copy RSS</button>
-          </li>
-          <li>
             <div class="feed-info"><span class="name">Frontline</span><br><span class="tagline">India's fortnightly magazine on politics and society</span></div>
             <button class="copy-btn" onclick="copy(this, 'https://frontline.thehindu.com/feeder/default.rss')">Copy RSS</button>
           </li>

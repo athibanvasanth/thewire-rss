@@ -1,42 +1,49 @@
-# indie-feeds — Custom RSS feeds for Indian independent media
+# indie-feeds
 
-Feeds are auto-generated every 30 minutes via GitHub Actions and served through GitHub Pages.
+Custom RSS feed generators for independent media sites that don't offer RSS, plus a curated directory of non-mainstream feeds from India and around the world. Auto-generated every 30 minutes via GitHub Actions and served through GitHub Pages.
 
-## Feeds
+**Live site:** [athibanvasanth.github.io/indie-feeds](https://athibanvasanth.github.io/indie-feeds/)
 
-| Feed | Source | URL |
-|------|--------|-----|
-| The Wire | All categories | [feed.xml](https://athibanvasanth.github.io/indie-feeds/feed.xml) |
-| The Wire — Government | Government category | [government.xml](https://athibanvasanth.github.io/indie-feeds/government.xml) |
-| The Wire — Politics | Politics category | [politics.xml](https://athibanvasanth.github.io/indie-feeds/politics.xml) |
-| The Wire — Rights | Rights category | [rights.xml](https://athibanvasanth.github.io/indie-feeds/rights.xml) |
-| Scroll Newsletter | Daily news briefing | [scroll.xml](https://athibanvasanth.github.io/indie-feeds/scroll.xml) |
-| The Caravan | Politics and culture | [caravan.xml](https://athibanvasanth.github.io/indie-feeds/caravan.xml) |
-| EPW | Social science journal | [epw.xml](https://athibanvasanth.github.io/indie-feeds/epw.xml) |
+## Generated Feeds
 
-## How it works
+| Site | Strategy | Feed |
+|------|----------|------|
+| The Wire | WordPress REST API (`/wp-json/wp/v2/`) | [feed.xml](https://athibanvasanth.github.io/indie-feeds/feed.xml) |
+| Scroll Newsletter | Pinia state extraction from page source | [scroll.xml](https://athibanvasanth.github.io/indie-feeds/scroll.xml) |
+| The Caravan | JSON-LD structured data | [caravan.xml](https://athibanvasanth.github.io/indie-feeds/caravan.xml) |
+| EPW | OpenGraph meta tags | [epw.xml](https://athibanvasanth.github.io/indie-feeds/epw.xml) |
 
-Each site is scraped using a different strategy based on what's available:
+The Wire also generates ~50 per-category feeds (politics, rights, economy, etc.) — see the [live site](https://athibanvasanth.github.io/indie-feeds/) for the full list.
 
-- **The Wire** — WordPress REST API (`/wp-json/wp/v2/`)
-- **Scroll Newsletter** — Pinia state extraction from page source
-- **The Caravan** — JSON-LD structured data
-- **EPW** — OpenGraph meta tags
+## Curated RSS Directory
 
-Feeds are generated as RSS 2.0 with support for media thumbnails, full HTML content, author info, and categories.
+The index page also includes a curated directory of native RSS feeds from non-mainstream independent media (Al Jazeera, Democracy Now!, The Intercept, Jacobin, Glenn Greenwald, Chris Hedges, and more) with one-click copy-to-clipboard.
 
-## Usage
+## How It Works
 
-Copy any feed URL from the table above and add it to your RSS reader (Inoreader, Feedly, Newsblur, etc.).
+Each generator script targets a different site using whatever structured data is available:
 
-## Self-hosting
+- `generate_feed.py` — The Wire (WordPress API, fetches categories dynamically)
+- `generate_scroll_feed.py` — Scroll Newsletter (Pinia/Stck.me state extraction)
+- `generate_caravan_feed.py` — The Caravan (JSON-LD structured data)
+- `generate_epw_feed.py` — EPW (OpenGraph meta tags)
+
+All feeds are RSS 2.0 with media thumbnails, full HTML content, author info, and categories.
+
+## Setup
 
 ```bash
 pip install -r requirements.txt
-export BASE_URL="http://localhost:8000/"
+
+export BASE_URL="https://athibanvasanth.github.io/indie-feeds"
 python generate_feed.py
 python generate_scroll_feed.py
 python generate_caravan_feed.py
 python generate_epw_feed.py
+
 # feeds are generated in the public/ directory
 ```
+
+## Deployment
+
+GitHub Actions runs all generators every 30 minutes and deploys to GitHub Pages via `actions/deploy-pages`.
