@@ -1,6 +1,6 @@
 # indie-feeds
 
-Custom RSS feed generators for independent media sites that don't offer RSS, plus a curated directory of non-mainstream feeds from India and around the world. Auto-generated every 30 minutes via GitHub Actions and served through GitHub Pages.
+Custom RSS feed generators for independent media sites that don't offer RSS. Auto-generated every 30 minutes via GitHub Actions and served through GitHub Pages.
 
 **Live site:** [athibanvasanth.github.io/indie-feeds](https://athibanvasanth.github.io/indie-feeds/)
 
@@ -14,10 +14,6 @@ Custom RSS feed generators for independent media sites that don't offer RSS, plu
 | EPW | OpenGraph meta tags | [epw.xml](https://athibanvasanth.github.io/indie-feeds/epw.xml) |
 
 The Wire also generates ~50 per-category feeds (politics, rights, economy, etc.) — see the [live site](https://athibanvasanth.github.io/indie-feeds/) for the full list.
-
-## Curated RSS Directory
-
-The index page also includes a curated directory of native RSS feeds from non-mainstream independent media (Al Jazeera, Democracy Now!, The Intercept, Jacobin, Glenn Greenwald, Chris Hedges, and more) with one-click copy-to-clipboard.
 
 ## How It Works
 

@@ -269,24 +269,6 @@ def build_index(base_url, category_feeds):
       font-weight: 700;
       color: #1a1a1a;
     }}
-    .section-tag {{
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 0.2rem 0.55rem;
-      border-radius: 4px;
-      white-space: nowrap;
-    }}
-    .tag-generated {{
-      background: #e8734a;
-      color: white;
-    }}
-    .tag-curated {{
-      background: #2a7d5f;
-      color: white;
-    }}
-
     .feed-grid {{
       display: grid;
       grid-template-columns: 1fr;
@@ -340,70 +322,6 @@ def build_index(base_url, category_feeds):
     .feed-card .feed-links a .rss-icon {{
       color: #e8734a;
       font-size: 0.7rem;
-    }}
-
-    .category-group {{
-      margin-bottom: 1.8rem;
-    }}
-    .category-group h3 {{
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #888;
-      margin-bottom: 0.6rem;
-      padding-bottom: 0.3rem;
-      border-bottom: 1px solid #e5e2de;
-    }}
-    .category-group .feed-list {{
-      list-style: none;
-    }}
-    .category-group .feed-list li {{
-      padding: 0.45rem 0;
-      border-bottom: 1px solid #f0eeea;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }}
-    .category-group .feed-list li:last-child {{
-      border-bottom: none;
-    }}
-    .feed-list .feed-info {{
-      flex: 1;
-    }}
-    .feed-list .feed-info .name {{
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #1a1a1a;
-    }}
-    .feed-list .feed-info .tagline {{
-      font-size: 0.78rem;
-      color: #888;
-    }}
-    .feed-list .copy-btn {{
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      font-size: 0.72rem;
-      padding: 0.22rem 0.55rem;
-      background: #f7f5f2;
-      border: 1px solid #e5e2de;
-      border-radius: 5px;
-      color: #666;
-      cursor: pointer;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      transition: all 0.15s;
-      white-space: nowrap;
-    }}
-    .feed-list .copy-btn:hover {{
-      background: #eee;
-      border-color: #ccc;
-      color: #1a1a1a;
-    }}
-    .feed-list .copy-btn.copied {{
-      background: #2a7d5f;
-      border-color: #2a7d5f;
-      color: white;
     }}
 
     .wire-categories {{
@@ -472,18 +390,10 @@ def build_index(base_url, category_feeds):
       color: #1a1a1a;
     }}
 
-    .coming-soon {{
-      font-size: 0.68rem;
-      color: #999;
-      font-style: italic;
-      margin-left: 0.3rem;
-    }}
-
     @media (max-width: 500px) {{
       .hero h1 {{ font-size: 1.7rem; }}
       .hero p {{ font-size: 0.95rem; }}
       .feed-card {{ padding: 0.75rem 0.9rem; }}
-      .category-group .feed-list li {{ flex-direction: column; align-items: flex-start; gap: 0.3rem; }}
     }}
   </style>
 </head>
@@ -491,7 +401,7 @@ def build_index(base_url, category_feeds):
 
   <div class="hero">
     <h1>indie<span>-</span>feeds</h1>
-    <p>A curated directory of RSS feeds for independent journalism. Custom-generated feeds for sites that don't offer RSS, plus native feeds from trusted sources worldwide.</p>
+    <p>Custom-generated RSS feeds for independent media sites that don't offer RSS. Fresh every 30 minutes.</p>
     <div class="badge">Updated every 30 minutes</div>
   </div>
 
@@ -499,10 +409,8 @@ def build_index(base_url, category_feeds):
 
     <div class="section">
       <div class="section-header">
-        <h2>Custom-Generated Feeds</h2>
-        <span class="section-tag tag-generated">Built by us</span>
+        <h2>Feeds</h2>
       </div>
-      <p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">These sites don't offer RSS feeds. We generate them fresh every 30 minutes.</p>
 
       <div class="feed-grid">
         <div class="feed-card">
@@ -545,97 +453,6 @@ def build_index(base_url, category_feeds):
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-header">
-        <h2>Curated RSS Directory</h2>
-        <span class="section-tag tag-curated">Native feeds</span>
-      </div>
-      <p style="font-size:0.85rem;color:#666;margin-bottom:1.2rem;">These sites offer their own RSS feeds. Click to copy the feed URL to your clipboard.</p>
-
-      <div class="category-group">
-        <h3>Indian Independent News</h3>
-        <ul class="feed-list">
-          <li>
-            <div class="feed-info"><span class="name">Frontline</span><br><span class="tagline">India's fortnightly magazine on politics and society</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://frontline.thehindu.com/feeder/default.rss')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">Newsclick</span><br><span class="tagline">People's news platform</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://www.newsclick.in/rss.xml')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">PARi</span><br><span class="tagline">People's Archive of Rural India</span> <span class="coming-soon">feed coming soon</span></div>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">People's Dispatch</span><br><span class="tagline">Grassroots movements worldwide</span> <span class="coming-soon">feed coming soon</span></div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="category-group">
-        <h3>International News &amp; Analysis</h3>
-        <ul class="feed-list">
-          <li>
-            <div class="feed-info"><span class="name">Al Jazeera</span><br><span class="tagline">News from the Global South</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://www.aljazeera.com/xml/rss/all.xml')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">Democracy Now!</span><br><span class="tagline">Independent global news hour</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://www.democracynow.org/democracynow.rss')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">The Intercept</span><br><span class="tagline">Investigative journalism in the public interest</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://theintercept.com/feed/')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">Jacobin</span><br><span class="tagline">Leftist politics, culture, and economics</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://jacobin.com/feed')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">CounterPunch</span><br><span class="tagline">Tells the facts, names the names</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://www.counterpunch.org/feed/')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">The Grayzone</span><br><span class="tagline">Original investigative journalism</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://thegrayzone.com/feed/')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">ZNetwork</span><br><span class="tagline">Vision and strategy for a better world</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://znetwork.org/feed/')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">ScheerPost</span><br><span class="tagline">Fearless journalism since Robert Scheer</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://scheerpost.com/feed/')">Copy RSS</button>
-          </li>
-        </ul>
-      </div>
-
-      <div class="category-group">
-        <h3>Independent Journalists &amp; Newsletters</h3>
-        <ul class="feed-list">
-          <li>
-            <div class="feed-info"><span class="name">Zeteo</span><br><span class="tagline">Mehdi Hasan — fearless, independent media</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://zeteo.com/feed')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">Drop Site News</span><br><span class="tagline">Jeremy Scahill &amp; Ryan Grim</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://www.dropsitenews.com/feed')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">Glenn Greenwald</span><br><span class="tagline">Civil liberties and press freedom</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://greenwald.substack.com/feed')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">Chris Hedges</span><br><span class="tagline">Pulitzer Prize-winning journalist</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://chrishedges.substack.com/feed')">Copy RSS</button>
-          </li>
-          <li>
-            <div class="feed-info"><span class="name">Caitlin Johnstone</span><br><span class="tagline">Rogue journalist, bogan socialist</span></div>
-            <button class="copy-btn" onclick="copy(this, 'https://www.caitlinjohnstone.com.au/feed/')">Copy RSS</button>
-          </li>
-        </ul>
-      </div>
-    </div>
 
     <div class="how-to">
       <h2>How to use these feeds</h2>
@@ -655,16 +472,6 @@ def build_index(base_url, category_feeds):
   </div>
 
   <script>
-    function copy(btn, url) {{
-      navigator.clipboard.writeText(url).then(function() {{
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(function() {{
-          btn.textContent = 'Copy RSS';
-          btn.classList.remove('copied');
-        }}, 1500);
-      }});
-    }}
     function copyFeed(e, url) {{
       if (url) {{
         e.preventDefault();
